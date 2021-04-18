@@ -36,5 +36,5 @@ jobs:
           docker-compose build
           docker-compose up -d
           docker-compose exec -T web composer install
-          docker-compose exec -T web APP_KEY=`php artisan key:generate --show`
+          docker-compose exec -T web php artisan key:generate
           docker-compose down -v
