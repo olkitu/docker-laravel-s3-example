@@ -30,4 +30,4 @@ And then restart web container
 docker-compose up -d web
 ```
 
-Then navigate to https://localhost:8080 and test image upload. You can browse then images via Minio http://localhost:9000 . Login with Root Bucket Keys in `.env` file.
+Then navigate to http://localhost:8080 and test image upload. You can browse then images via Minio http://localhost:9000 . Login with Root Bucket Keys in `.env` file.
