@@ -2,6 +2,10 @@
 
 This is just for local testing use. Don't use on production.
 
+Based [olkitu/docker-nginx-php-fpm](https://hub.docker.com/r/olkitu/docker-nginx-php-fpm) 
+
+## Testing locally
+
 Clone repository locally
 
 ```
