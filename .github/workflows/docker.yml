@@ -35,6 +35,6 @@ jobs:
           cp .env.example .env
           docker-compose build
           docker-compose up -d
-          docker-compose -T exec web composer install
-          docker-compose -T exec web APP_KEY=`php artisan key:generate --show`
+          docker-compose exec -T web composer install
+          docker-compose exec -T web APP_KEY=`php artisan key:generate --show`
           docker-compose down -v
