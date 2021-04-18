@@ -1,0 +1,40 @@
+name: Docker
+
+on:
+  push:
+    # Publish `$default-branch` as Docker `latest` image.
+    branches:
+      - $default-branch
+    paths-ignore:
+      - LICENSE
+      - README.md
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  # TODO: Change variable to your image's name.
+  IMAGE_NAME: docker-laravel-s3-example
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: |
+          apt-get update && apt-get install curl
+          cp .env.example .env
+          docker-compose build
+          docker-compose up -d
+          docker-compose exec web composer install
+          docker-compose exec web APP_KEY=`php artisan key:generate --show`
+          docker-compose down
