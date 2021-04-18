@@ -1,0 +1,54 @@
+version: '2.4'
+services:
+  web:
+    build: .
+    ports:
+    - 8080:80
+    env_file: .env
+    volumes:
+    - ./app:/var/www/html
+    depends_on:
+      laravel.minio:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb
+    env_file: .env
+    ports:
+    - 3306:3306
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1
+  laravel.minio:
+    image: minio/minio
+    command: 'server /data'
+    ports:
+    - 9000:9000
+    env_file: .env
+    environment:
+        MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
+        MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
+    volumes:
+    - laravel-s3-example-data:/data
+    healthcheck:
+      test: curl -f http://localhost:9000/minio/health/live
+  create_bucket:
+    image: minio/mc
+    env_file: .env
+    entrypoint: >
+      /bin/sh -c '
+      /usr/bin/mc config host add s3 http://laravel.minio:9000 ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY} --api S3v4;
+      [[ ! -z "`/usr/bin/mc ls s3 | grep laravel`" ]] || /usr/bin/mc mb s3/laravel;
+      /usr/bin/mc policy set download s3/laravel;
+      exit 0;
+      '
+    depends_on:
+      laravel.minio:
+        condition: service_healthy
+volumes:
+  laravel-s3-example-data:
