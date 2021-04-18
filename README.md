@@ -5,7 +5,7 @@ This is just for local testing use. Don't use on production.
 Clone repository locally
 
 ```
-git clone https://github.com/olkitu/docker-laravel-s3-example
+git clone https://github.com/olkitu/docker-laravel-s3-example.git
 ```
 
 Copy `.env.example` to `.env`.
