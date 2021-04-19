@@ -22,6 +22,14 @@ docker-compose up -d
 docker-compose exec web composer install
 ```
 
+Or with [traefik](https://hub.docker.com/_/traefik)
+
+```
+docker-compose build
+docker-compose -f docker-compose.traefik.yml up -d
+docker-compose exec web compoer install
+```
+
 Generate Application Encryption key and save it to `APP_KEY` section of `.env` file on the root of the project
 
 ```
@@ -34,4 +42,4 @@ And then restart web container
 docker-compose up -d web
 ```
 
-Then navigate to http://localhost:8080 and test image upload. You can browse then images via Minio http://localhost:9000 . Login with Root Bucket Keys in `.env` file.
+Then navigate to http://localhost:8080 (If use traefik on Chrome you can use http://laravel.localhost) and test image upload. You can browse then images via Minio http://localhost:9000 (If you use traefik, on Chrome you can use http://minio.localhost). Login with Root Bucket Keys in `.env` file.
